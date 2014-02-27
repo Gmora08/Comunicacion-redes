@@ -16,22 +16,22 @@ import java.io.*;
 
 public class Tablero extends JFrame implements ActionListener{
 
-	principiante nivelPrincipiante = new principiante();
-	intermedio nivelIntermedio = new intermedio();
-	demente nivelDemente = new demente();
+    principiante nivelPrincipiante = new principiante();
+    intermedio nivelIntermedio = new intermedio();
+    demente nivelDemente = new demente();
 	
     private JMenuBar barra;
     private JMenu juego, ayuda;
     private JMenuItem principiante, intermedio, demente;    
     private boolean prin=true, inter=false, demen=false;  
     
-    static String ip;
-    static int puerto;
-    static int dificultad;
-    static String jugador;
-    static Socket cliente;
-    static ObjectOutputStream oos;
-    static ObjectInputStream ois;
+    String ip;
+    int puerto;
+    int dificultad;
+    String jugador;
+    Socket cliente;
+    ObjectOutputStream oos;
+    ObjectInputStream ois;
     
     private String[] archi = {"/iconos/gano.png", "/iconos/perdio.png", "/iconos/nueva.png"};
 	  
@@ -42,43 +42,58 @@ public class Tablero extends JFrame implements ActionListener{
             ima[i] = new ImageIcon(getClass().getResource(archi[i]));
         
         
-        }
-    	this.add(nivelPrincipiante);
-    	this.setLayout(null);
-    	this.setTitle("Buscaminas!!!");        
-        barra = new JMenuBar();
+    }
+    if(dificultad == 0)
+    {
+        this.add(nivelPrincipiante);
+        setSize(206, 294);
+    }
+    else if(dificultad == 1)
+    {
+        this.add(nivelIntermedio);
+        setSize(500, 540);
+    }
+    else
+    {
+        this.add(nivelDemente);
+        setSize(600, 640);
+    }
+    this.setLayout(null);
+    this.setTitle("Buscaminas!!!");        
+    barra = new JMenuBar();
 
-        juego = new JMenu("Juego");
-        ayuda = new JMenu("Ayuda");
+    juego = new JMenu("Juego");
+    ayuda = new JMenu("Ayuda");
 
-        principiante = new JMenuItem("Principiante");
-        intermedio = new JMenuItem("Intermedio");
-        demente = new JMenuItem("Demente");
-       //agregamos los items de menu
-        juego.add(principiante);
-        juego.add(intermedio);
-        juego.add(demente);
-        //agregado los menu ala barra
-        barra.add(juego);
-        barra.add(ayuda);
-        //bara agregada al frame
-        this.setJMenuBar(barra);
-        this.principiante.addActionListener(this);
-        this.intermedio.addActionListener(this);
-        this.demente.addActionListener(this);
-
-        //propiedades del frame
-        setSize(206, 294);        
-        setLocationRelativeTo(null);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);   
-        setIconImage(new ImageIcon(getClass().getResource("/iconos/icono.png")).getImage());
-        setVisible(true);
+    principiante = new JMenuItem("Principiante");
+    intermedio = new JMenuItem("Intermedio");
+    demente = new JMenuItem("Demente");
+    //agregamos los items de menu
+    juego.add(principiante);
+    juego.add(intermedio);
+    juego.add(demente);
+    //agregado los menu ala barra
+    barra.add(juego);
+    barra.add(ayuda);
+    //bara agregada al frame
+    this.setJMenuBar(barra);
+    this.principiante.addActionListener(this);
+    this.intermedio.addActionListener(this);
+    this.demente.addActionListener(this);
+    //propiedades del frame
+            
+    setLocationRelativeTo(null);
+    setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);   
+    setIconImage(new ImageIcon(getClass().getResource("/iconos/icono.png")).getImage());
+    setVisible(true);
+    
+        System.out.println("Entro al construcutor");
         
-        this.ip = ip;
-        this.puerto = puerto;
-        this.dificultad = dificultad;
-        this.jugador = jugador;
-        
+    this.ip = ip;
+    this.puerto = puerto;
+    this.dificultad = dificultad;
+    this.jugador = jugador;
+      
     }
 
     public void actionPerformed(ActionEvent e) {        
@@ -123,9 +138,10 @@ public class Tablero extends JFrame implements ActionListener{
             setSize(406, 495);
             setLocationRelativeTo(null);  
         }else if(e.getSource()==principiante){        	
-        	nivelPrincipiante.botonP.setIcon(ima[2]);
-        	nivelPrincipiante.quitarBotonesPrincipiante();
-        	nivelPrincipiante.setVisible(false);            
+            
+            nivelPrincipiante.botonP.setIcon(ima[2]);
+            nivelPrincipiante.quitarBotonesPrincipiante();
+            nivelPrincipiante.setVisible(false);            
             nivelPrincipiante.labelP.setText("");
             nivelPrincipiante.nuevaPartidaPrincipiante();
             nivelPrincipiante.setVisible(true);
@@ -146,7 +162,7 @@ public class Tablero extends JFrame implements ActionListener{
     } 
     
     
-     public static void conexion() throws IOException
+     public void conexion() throws IOException
     {
         int error;
         cliente = new Socket(InetAddress.getByName(ip), puerto);
@@ -154,19 +170,18 @@ public class Tablero extends JFrame implements ActionListener{
         oos = new ObjectOutputStream(cliente.getOutputStream());
         oos.flush();
         ois = new ObjectInputStream(cliente.getInputStream());
+        
         oos.writeInt(dificultad);
         oos.flush();
         oos.writeUTF(jugador);
         oos.flush();
-        error = ois.readInt();
-        if (error == 1 )
-        {
+        //error = ois.readInt();
+        System.out.println("Ya se leyo");
+        //if (error == 1 )
+        //{
             //Habilitar panel
-        }
-        oos.writeInt(2);
-        oos.flush();
-        oos.writeInt(50);
-        oos.flush();
+        //}
+       
         oos.close();
         ois.close();
         cliente.close();

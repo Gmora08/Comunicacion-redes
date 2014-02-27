@@ -127,9 +127,9 @@ public class Inicial extends javax.swing.JFrame {
         System.out.println(puerto);
         System.out.println(ip);
         Tablero t = new Tablero(ip, puerto, nivel, usuario);
-        t.setVisible(true);
-        try {
-            Tablero.conexion();
+        //t.setVisible(true);
+       try {
+            t.conexion();
         } catch (IOException ex) {
             Logger.getLogger(Inicial.class.getName()).log(Level.SEVERE, null, ex);
         }
