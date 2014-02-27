@@ -25,9 +25,9 @@ import javax.swing.JPanel;
 
 public class demente extends JPanel implements ActionListener{
 	private int casillasFaltantes = 0, minas3 = 30;
-	int valoresDemente[][] = new int[minas3][minas3];
+	int valoresDemente[][] = new int[16][minas3];
 	public JLabel labelD;	
-	private JButton botonesDemente[][] = new JButton[minas3][minas3];
+	private JButton botonesDemente[][] = new JButton[16][minas3];
 	public JButton botonD;
 	
 	public String[] archi = {"/iconos/gano.png", "/iconos/perdio.png", "/iconos/nueva.png"};
@@ -36,7 +36,7 @@ public class demente extends JPanel implements ActionListener{
 	private ImageIcon[] imagenes = new ImageIcon[10];    
 	public ImageIcon[] ima = new ImageIcon[3];   
     
-    private boolean visibleDemente[][] = new boolean[minas3][minas3];
+    private boolean visibleDemente[][] = new boolean[16][minas3];
 	
 
 	public demente() {
@@ -60,9 +60,9 @@ public class demente extends JPanel implements ActionListener{
         casillasFaltantes = 0;        
         ponerBotonesDemente();
         verDemente(false);
-        ponerMinasDemente();
-        contornoDemente();
-        visualizarMinasDemente();
+//        ponerMinasDemente();
+  //      contornoDemente();
+    //    visualizarMinasDemente();
         eventosDemente();
     }
 	
@@ -72,10 +72,10 @@ public class demente extends JPanel implements ActionListener{
             imagenes[i] = new ImageIcon(getClass().getResource(archivos[i]));
         }
         
-        for(int f = 0; f<minas3; f++){
+        for(int f = 0; f<16; f++){
         for(int c = 0; c<minas3; c++){
             botonesDemente[f][c] = new JButton();
-            botonesDemente[f][c].setBounds(20*f, 20*c+40,20, 20);
+            botonesDemente[f][c].setBounds(40*f, 40*c+40,40,40);
             botonesDemente[f][c].setBackground(Color.gray);            
             this.add(botonesDemente[f][c]);
         }
@@ -83,7 +83,7 @@ public class demente extends JPanel implements ActionListener{
     }
 	
 	public void ponerMinasDemente(){
-        for(int f=0;f<minas3;f++){
+        for(int f=0;f<16;f++){
         for(int c=0;c<minas3;c++){
             valoresDemente[f][c]=0;
         }
@@ -114,7 +114,7 @@ public class demente extends JPanel implements ActionListener{
         }
 	
 	public void verDemente(boolean valor){
-        for(int f=0;f<minas3;f++){
+        for(int f=0;f<16;f++){
         for(int c=0;c<minas3;c++){
             visibleDemente[f][c]=valor;
         }
@@ -156,17 +156,50 @@ public class demente extends JPanel implements ActionListener{
             } catch (IOException ex) {
                 Logger.getLogger(principiante.class.getName()).log(Level.SEVERE, null, ex);
             }
-            pulsarBotonVasDemente(f,c);
-            visualizarMinasDemente();
+            int num = 0;
+        try {
+            num = Tablero.leerTiro();
+        } catch (IOException ex) {
+            Logger.getLogger(principiante.class.getName()).log(Level.SEVERE, null, ex);
+        }
+            
+            if(num == -1)
+            {
+                botonesDemente[f][c].setText("XD");
+                botonesDemente[f][c].setEnabled(false);
+                
+            }
+            else if (num == 0)
+            {
+                botonesDemente[f][c].setText("B");
+                botonesDemente[f][c].setEnabled(false);
+            }
+            else if (num == 1)
+            {
+                botonesDemente[f][c].setText("1");
+                botonesDemente[f][c].setEnabled(false);
+            }
+            else if (num == 2)
+            {
+                botonesDemente[f][c].setText("2");
+                botonesDemente[f][c].setEnabled(false);
+            }
+             else if (num == 10)
+            {
+                JOptionPane.showMessageDialog(null, "Ya ganastesesss");
+            }
+            
+            //pulsarBotonVasPrincipiante(f,c);
+            //visualizarMinasPrincipiante();
     }
 	
 	public void eventosDemente(){
-        for(int f=0;f<minas3;f++){
+        for(int f=0;f<16;f++){
         for(int c=0;c<minas3;c++){
             botonesDemente[f][c].addActionListener(
             new ActionListener(){
                 public void actionPerformed(ActionEvent e){
-                    for(int f=0;f<minas3;f++){
+                    for(int f=0;f<16;f++){
                     for(int c=0;c<minas3;c++){
                         if(e.getSource()==botonesDemente[f][c])
                             pulsarBotonDemente(f,c);

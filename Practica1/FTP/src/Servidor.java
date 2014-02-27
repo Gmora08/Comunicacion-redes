@@ -85,7 +85,7 @@ public class Servidor {
             leidos = 0;
             tam_bloque = (tamano_arch >= 1024)? 1024 : (int) tamano_arch;
             
-            while((bits_leidos = ois.read(buffer, 0, tam_bloque)) != 0)
+            while((bits_leidos = ois.read(buffer, 0, tam_bloque)) > 0)
             {
                 fos.write(buffer, 0, bits_leidos);
                 fos.flush();

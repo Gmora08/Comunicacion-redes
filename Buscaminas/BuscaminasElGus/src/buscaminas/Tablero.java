@@ -25,6 +25,7 @@ public class Tablero extends JFrame implements ActionListener{
     private JMenuItem principiante, intermedio, demente;    
     private boolean prin=true, inter=false, demen=false;  
     
+    static boolean ciclo = true;
     String ip;
     int puerto;
     int dificultad;
@@ -62,24 +63,24 @@ public class Tablero extends JFrame implements ActionListener{
     this.setTitle("Buscaminas!!!");        
     barra = new JMenuBar();
 
-    juego = new JMenu("Juego");
+    //juego = new JMenu("Juego");
     ayuda = new JMenu("Ayuda");
 
     principiante = new JMenuItem("Principiante");
     intermedio = new JMenuItem("Intermedio");
     demente = new JMenuItem("Demente");
     //agregamos los items de menu
-    juego.add(principiante);
-    juego.add(intermedio);
-    juego.add(demente);
+    //juego.add(principiante);
+    //juego.add(intermedio);
+    //juego.add(demente);
     //agregado los menu ala barra
-    barra.add(juego);
+   // barra.add(juego);
     barra.add(ayuda);
     //bara agregada al frame
     this.setJMenuBar(barra);
-    this.principiante.addActionListener(this);
-    this.intermedio.addActionListener(this);
-    this.demente.addActionListener(this);
+    //this.principiante.addActionListener(this);
+    //this.intermedio.addActionListener(this);
+    //this.demente.addActionListener(this);
     //propiedades del frame
             
     setLocationRelativeTo(null);
@@ -96,6 +97,7 @@ public class Tablero extends JFrame implements ActionListener{
       
     }
 
+    
     public void actionPerformed(ActionEvent e) {        
         if(e.getSource()==demente){
         	nivelDemente.botonD.setIcon(ima[2]);
@@ -187,16 +189,35 @@ public class Tablero extends JFrame implements ActionListener{
         //cliente.close();
         
     }
-     
+    
     static void tirada(int x, int y) throws IOException
     {
-        oos.writeInt(x);
-        oos.flush();
         oos.writeInt(y);
+        oos.flush();
+        oos.writeInt(x);
         oos.flush();
     }
     
+    static int leerTiro() throws IOException
+    {
+        
+        while(ciclo){
+            try{
+                int num = ois.readInt();
+                System.out.println(num);
+                return num;
+            }catch(Exception e){}
+        }
+        return 0;
+    }
     
+    static void CerrarConexion() throws IOException
+    {
+        ciclo = false;
+        oos.close();
+        ois.close();
+        cliente.close();
+    }
 
     
 }

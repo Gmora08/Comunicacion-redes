@@ -62,12 +62,12 @@ public class Cliente {
                 oos.flush();
                 oos.writeLong(tamano);
                 oos.flush();
-                fis = new FileInputStream(f[i]);
+                fis = new FileInputStream(f[i].getAbsolutePath());
                 
                 leidos = 0;
                 tam_bloque = (fis.available() >= 1024)? 1024 : fis.available();
                 
-                while((bits_leidos = fis.read(buffer, 0, tam_bloque)) != 0)
+                while((bits_leidos = fis.read(buffer, 0, tam_bloque)) > 0)
                 {
                     oos.write(buffer,0,bits_leidos);
                     oos.flush();

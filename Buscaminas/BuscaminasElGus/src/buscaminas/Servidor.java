@@ -27,7 +27,7 @@ public class Servidor {
         if(ss != null){
             while(true){
                 try {
-                    reset();
+                    
                     System.out.println("Servidor Iniciado...");
                     Socket c = ss.accept();
                     c.setSoTimeout(60000);
@@ -53,8 +53,9 @@ public class Servidor {
                             posf = ois.readInt();
                             posc = ois.readInt();
                             System.out.println("PosFila: " + posf + " PosColumna: " + posc);
+                            tirada(posf,posc,oos);
                         }catch(IOException e){}
-                        Thread.sleep(100);
+                       // Thread.sleep(100);
                     }
 
                     ois.close();
@@ -86,7 +87,7 @@ public class Servidor {
             minas = 99;
         }
         //Crear Tablero dependiendo la dificultad
-        destapadas = f*c;
+        destapadas = f*c - minas;
         tablero = new int[f+1][c+1];
         for(int i = 0;i < f; i++){
             for(int j = 0;j < c;j++){
@@ -126,28 +127,39 @@ public class Servidor {
         return 0;
     }
     
-    public void tirada(int fil,int col){
+    public void tirada(int fil,int col,ObjectOutputStream oos)throws IOException{
         int casilla = tablero[fil][col];
         //Mina
-        if(casilla == -1){
-            destapadas--;
-            //Envio codigo de perdio
-            perdio = true;
+        System.out.println(casilla);
+        if(destapadas != 0){
+            if(casilla == -1){
+                destapadas--;
+                //Envio codigo de perdio
+                oos.writeInt(-1);
+                oos.flush();
+                perdio = true;
+            }
+            //Casilla con Numero
+            else if(casilla >=0){
+                destapadas--;
+                oos.writeInt(casilla);
+                oos.flush();
+                //Envio codigo de numero solo seguido del numero
+            }
         }
-        //Casilla con Numero
-        else if(casilla >0){
-            destapadas--;
-            //Envio codigo de numero solo seguido del numero
+        else
+        {
+            oos.writeInt(10);
+            oos.flush();
         }
-        else if(casilla == 0){
+        
+        //else if(casilla == 0){
             //destapadas = destapadas - total de espacios en blanco adyacentes
             //Envio codigo de espacio en blanco y un arreglo de las casillas adyacentes???
-        }
+        //}
     }
     
-    public void reset(){
     
-    }
     
     public static void main(String[] args) {
         Servidor s = new Servidor();

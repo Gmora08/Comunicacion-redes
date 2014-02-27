@@ -24,7 +24,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 public class intermedio extends JPanel implements ActionListener{
-	private int casillasFaltantes = 0, minas2 = 20;
+	private int casillasFaltantes = 0, minas2 = 16;
 	int valoresIntermedio[][] = new int[minas2][minas2];
 	public JLabel labelI;	
 	private JButton botonesIntermedio[][] = new JButton[minas2][minas2];
@@ -45,7 +45,7 @@ public class intermedio extends JPanel implements ActionListener{
             ima[i] = new ImageIcon(getClass().getResource(archi[i]));
         }
 		nuevaPartidaIntermedio();        
-		this.setSize(400, 440);
+		this.setSize(640, 680);
 		botonI = new JButton();
 		botonI.setBounds(186, 5, 30, 30);
         botonI.setIcon(ima[2]);                
@@ -59,10 +59,10 @@ public class intermedio extends JPanel implements ActionListener{
 	public void nuevaPartidaIntermedio(){        
         casillasFaltantes = 0;        
         ponerBotonesIntermedio();
-        verIntermedio(false);
-        ponerMinasIntermedio();
-        contornoIntermedio();
-        visualizarMinasIntermedio();
+        //verIntermedio(false);
+        //ponerMinasIntermedio();
+        //contornoIntermedio();
+        //visualizarMinasIntermedio();
         eventosIntermedio();
     }
 	
@@ -74,7 +74,7 @@ public class intermedio extends JPanel implements ActionListener{
         for(int f = 0; f<minas2; f++){
         for(int c = 0; c<minas2; c++){
             botonesIntermedio[f][c] = new JButton();
-            botonesIntermedio[f][c].setBounds(20*f, 20*c+40,20, 20);
+            botonesIntermedio[f][c].setBounds(40*f, 40*c+40,40, 40);
             botonesIntermedio[f][c].setBackground(Color.gray);
             //el evento del boton
             this.add(botonesIntermedio[f][c]);
@@ -150,14 +150,47 @@ public class intermedio extends JPanel implements ActionListener{
 	    }
 	 
 	public void pulsarBotonIntermedio(int f, int c) {
-                 try {
+            try {
                 Tablero.tirada(f, c);
             } catch (IOException ex) {
                 Logger.getLogger(principiante.class.getName()).log(Level.SEVERE, null, ex);
             }
-	        pulsarBotonVasIntermedio(f,c);
-	        visualizarMinasIntermedio();
-	    }
+            int num = 0;
+        try {
+            num = Tablero.leerTiro();
+        } catch (IOException ex) {
+            Logger.getLogger(principiante.class.getName()).log(Level.SEVERE, null, ex);
+        }
+            
+            if(num == -1)
+            {
+                botonesIntermedio[f][c].setText("XD");
+                botonesIntermedio[f][c].setEnabled(false);
+                
+            }
+            else if (num == 0)
+            {
+                botonesIntermedio[f][c].setText("B");
+                botonesIntermedio[f][c].setEnabled(false);
+            }
+            else if (num == 1)
+            {
+                botonesIntermedio[f][c].setText("1");
+                botonesIntermedio[f][c].setEnabled(false);
+            }
+            else if (num == 2)
+            {
+                botonesIntermedio[f][c].setText("2");
+                botonesIntermedio[f][c].setEnabled(false);
+            }
+             else if (num == 10)
+            {
+                JOptionPane.showMessageDialog(null, "Ya ganastesesss");
+            }
+            
+            //pulsarBotonVasPrincipiante(f,c);
+            //visualizarMinasPrincipiante();
+        }
 	 
 	public void eventosIntermedio(){
 	        for(int f=0;f<minas2;f++){
