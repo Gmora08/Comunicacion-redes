@@ -5,9 +5,6 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Random;
 
 public class Servidor {
     int[][] tablero;
@@ -81,10 +78,10 @@ public class Servidor {
             minas = 99;
         }
         //Crear Tablero dependiendo la dificultad
-        tablero = new int[f][c];
+        tablero = new int[f+1][c+1];
         for(int i = 0;i < f; i++){
             for(int j = 0;j < c;j++){
-                tablero[f][c] = 0;
+                tablero[i][j] = 0;
             }
         }
         //Generar Minas
@@ -98,11 +95,11 @@ public class Servidor {
         }
         //Generar Casillas 
         int x,y;
-        for(y=0;y<f;y++){
-            for(x=0;x<c;x++){
-                if(tablero[y][x]==-1){
-                    for(int f2=y-1;f2<=y+1;f2++){
-                        for(int c2=x-1;c2<=x+1;c2++){
+        for(x=0;x<f;x++){
+            for(y=0;y<c;y++){
+                if(tablero[x][y]==-1){
+                    for(int f2=x-1;f2<=x+1;f2++){
+                        for(int c2=y-1;c2<=y+1;c2++){
                             if(f2>=0 && f2<f && c2>=0 && c2<c && tablero[f2][c2]!=-1)
                                 tablero[f2][c2]++;
                         }
@@ -113,7 +110,7 @@ public class Servidor {
         //Imprimir tablero
         for(int i = 0;i < f; i++){
             for(int j = 0;j < c;j++){
-                System.out.print(tablero[f][c] + ",");
+                System.out.print(tablero[i][j] + ",");
             }
             System.out.print("\n");
         }
