@@ -14,14 +14,14 @@ public class Servidor {
     int nivel;
     String nombre;
     int minas;
-    int f,c;
+    int f,c,posf,posc;
     ServerSocket ss;
     
     public Servidor(){
         try{
             ss = new ServerSocket(4000);
         }catch(IOException e){
-            System.out.println("Error al Cerar Servidor: "+e.getMessage());
+            System.out.println("Error al Crear Servidor: "+e.getMessage());
         }
     }
     
@@ -44,20 +44,20 @@ public class Servidor {
                     oos.flush();
                     while(true){
                         try{
-                            x = ois.readInt();
-                            y = ois.readInt();
+                            posf = ois.readInt();
+                            posc = ois.readInt();
                             break;
                         }catch(IOException e){}
                         Thread.sleep(200);
                     }
-                    System.out.println("X: " + x + " Y: " + y);
+                    System.out.println("PosFila: " + posf + " PosColumna: " + posc);
 
                     ois.close();
                     oos.close();
                     c.close();
                     ss.close();
                     break;
-                } catch (IOException | InterruptedException e) {
+                } catch (Exception e) {
                      System.out.println("Error Servicio:"+e.getMessage());
                 }
             }
@@ -98,19 +98,26 @@ public class Servidor {
         }
         //Generar Casillas 
         int x,y;
-        for(int y=0;y<f;y++){
-            for(int c=0;c<minas1;c++){
-                
-                if(valoresPrincipiante[f][c]==9){
-                    for(int f2=f-1;f2<=f+1;f2++){
-                        for(int c2=c-1;c2<=c+1;c2++){
-                            if(f2>=0 && f2<minas1 && c2>=0 && c2<minas1 && valoresPrincipiante[f2][c2]!=9)
-                                valoresPrincipiante[f2][c2]++;
+        for(y=0;y<f;y++){
+            for(x=0;x<c;x++){
+                if(tablero[y][x]==-1){
+                    for(int f2=y-1;f2<=y+1;f2++){
+                        for(int c2=x-1;c2<=x+1;c2++){
+                            if(f2>=0 && f2<f && c2>=0 && c2<c && tablero[f2][c2]!=-1)
+                                tablero[f2][c2]++;
                         }
-                      }
-                   }
+                    }
                 }
+            }
         }
+        //Imprimir tablero
+        for(int i = 0;i < f; i++){
+            for(int j = 0;j < c;j++){
+                System.out.print(tablero[f][c] + ",");
+            }
+            System.out.print("\n");
+        }
+        
         
         return 0;
     }
