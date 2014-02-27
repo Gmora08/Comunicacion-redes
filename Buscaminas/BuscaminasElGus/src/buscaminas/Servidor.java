@@ -9,8 +9,8 @@ import java.net.Socket;
 public class Servidor {
     int[][] tablero;
     int nivel;
-    String nombre;
-    int minas;
+    String jugador;
+    int minas,destapadas;
     int f,c,posf,posc;
     ServerSocket ss;
     boolean gano,perdio;
@@ -37,8 +37,8 @@ public class Servidor {
 
                     nivel = ois.readInt();
                     System.out.println("Nivel:" + nivel);
-                    nombre = ois.readUTF();
-                    System.out.println("Jugador:" + nombre);
+                    jugador = ois.readUTF();
+                    System.out.println("Jugador:" + jugador);
                     //Envia Resultado de Crea Tablero
                     int  rtab = creaTablero();
                     gano = false;
@@ -54,7 +54,7 @@ public class Servidor {
                             posc = ois.readInt();
                             System.out.println("PosFila: " + posf + " PosColumna: " + posc);
                         }catch(IOException e){}
-                        Thread.sleep(200);
+                        Thread.sleep(100);
                     }
 
                     ois.close();
@@ -86,6 +86,7 @@ public class Servidor {
             minas = 99;
         }
         //Crear Tablero dependiendo la dificultad
+        destapadas = f*c;
         tablero = new int[f+1][c+1];
         for(int i = 0;i < f; i++){
             for(int j = 0;j < c;j++){
@@ -126,7 +127,22 @@ public class Servidor {
     }
     
     public void tirada(int fil,int col){
-    
+        int casilla = tablero[fil][col];
+        //Mina
+        if(casilla == -1){
+            destapadas--;
+            //Envio codigo de perdio
+            perdio = true;
+        }
+        //Casilla con Numero
+        else if(casilla >0){
+            destapadas--;
+            //Envio codigo de numero solo seguido del numero
+        }
+        else if(casilla == 0){
+            //destapadas = destapadas - total de espacios en blanco adyacentes
+            //Envio codigo de espacio en blanco y un arreglo de las casillas adyacentes???
+        }
     }
     
     public void reset(){
