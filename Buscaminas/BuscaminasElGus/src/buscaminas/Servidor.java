@@ -37,7 +37,9 @@ public class Servidor {
                     System.out.println("Nivel:" + nivel);
                     nombre = ois.readUTF();
                     System.out.println("Jugador:" + nombre);
-                    oos.writeInt(creaTablero());
+                    //Envia Resultado de Crea Tablero
+                    int  rtab = creaTablero();
+                    oos.writeInt(rtab);
                     oos.flush();
                     while(true){
                         try{
