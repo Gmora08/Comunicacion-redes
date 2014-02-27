@@ -11,6 +11,9 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -34,14 +37,14 @@ public class principiante extends JPanel implements ActionListener{
     private boolean visiblePrincipiante[][] = new boolean[minas1][minas1];
     	
     public principiante(){
-		this.setLayout(null);
-		for(int i=0;i<3;i++){
+        this.setLayout(null);
+	for(int i=0;i<3;i++){
             ima[i] = new ImageIcon(getClass().getResource(archi[i]));
         }
-		nuevaPartidaPrincipiante();        
-		this.setSize(200, 240);
-		botonP = new JButton();
-		botonP.setBounds(86, 5, 30, 30);
+	nuevaPartidaPrincipiante();        
+	this.setSize(200, 240);
+	botonP = new JButton();
+	botonP.setBounds(86, 5, 30, 30);
         botonP.setIcon(ima[2]);                
         this.add(botonP);
         this.botonP.addActionListener(this);
@@ -51,14 +54,14 @@ public class principiante extends JPanel implements ActionListener{
 	}
 	
 	public void nuevaPartidaPrincipiante(){      
-		ponerBotonesPrincipiante();	
-        casillasFaltantes = 0;
-        verPrincipiante(false);
-        ponerMinasPrincipiante();
-        contornoPrincipiante();
-        visualizarMinasPrincipiante();
-        eventosPrincipiante();         
-    }	
+            ponerBotonesPrincipiante();	
+            casillasFaltantes = 0;
+            verPrincipiante(false);
+            ponerMinasPrincipiante();
+            contornoPrincipiante();
+            visualizarMinasPrincipiante();
+            eventosPrincipiante();         
+        }	
 	
 	public void ponerBotonesPrincipiante(){
         for(int i=0;i<10;i++){
@@ -141,9 +144,14 @@ public class principiante extends JPanel implements ActionListener{
         }
     }
 	
-	public void pulsarBotonPrincipiante(int f, int c) {                       
-        pulsarBotonVasPrincipiante(f,c);
-        visualizarMinasPrincipiante();
+	public void pulsarBotonPrincipiante(int f, int c) {
+            try {
+                Tablero.tirada(f, c);
+            } catch (IOException ex) {
+                Logger.getLogger(principiante.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            pulsarBotonVasPrincipiante(f,c);
+            visualizarMinasPrincipiante();
     }
 	
 	public void eventosPrincipiante(){

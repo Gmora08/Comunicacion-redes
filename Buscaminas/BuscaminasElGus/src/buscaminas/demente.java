@@ -13,6 +13,9 @@ package buscaminas;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -148,8 +151,13 @@ public class demente extends JPanel implements ActionListener{
     }
 	
 	public void pulsarBotonDemente(int f, int c) {
-        pulsarBotonVasDemente(f,c);
-        visualizarMinasDemente();
+             try {
+                Tablero.tirada(f, c);
+            } catch (IOException ex) {
+                Logger.getLogger(principiante.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            pulsarBotonVasDemente(f,c);
+            visualizarMinasDemente();
     }
 	
 	public void eventosDemente(){

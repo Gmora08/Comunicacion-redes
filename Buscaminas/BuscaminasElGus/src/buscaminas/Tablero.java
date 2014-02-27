@@ -29,9 +29,9 @@ public class Tablero extends JFrame implements ActionListener{
     int puerto;
     int dificultad;
     String jugador;
-    Socket cliente;
-    ObjectOutputStream oos;
-    ObjectInputStream ois;
+    static Socket cliente;
+    static ObjectOutputStream oos;
+    static ObjectInputStream ois;
     
     private String[] archi = {"/iconos/gano.png", "/iconos/perdio.png", "/iconos/nueva.png"};
 	  
@@ -175,18 +175,28 @@ public class Tablero extends JFrame implements ActionListener{
         oos.flush();
         oos.writeUTF(jugador);
         oos.flush();
-        //error = ois.readInt();
-        System.out.println("Ya se leyo");
-        //if (error == 1 )
-        //{
-            //Habilitar panel
-        //}
+        error = ois.readInt();
+
+        if (error != 0 )
+        {
+            System.out.println("Error del servidor al crear el tablero");
+        }
        
-        oos.close();
-        ois.close();
-        cliente.close();
+        //oos.close();
+        //ois.close();
+        //cliente.close();
         
     }
+     
+    static void tirada(int x, int y) throws IOException
+    {
+        oos.writeInt(x);
+        oos.flush();
+        oos.writeInt(y);
+        oos.flush();
+    }
+    
+    
 
     
 }
