@@ -85,7 +85,7 @@ public class Servidor {
             leidos = 0;
             tam_bloque = (tamano_arch >= 1024)? 1024 : (int) tamano_arch;
             
-            while((bits_leidos = ois.read(buffer, 0, tam_bloque)) != -1)
+            while((bits_leidos = ois.read(buffer, 0, tam_bloque)) != 0)
             {
                 fos.write(buffer, 0, bits_leidos);
                 fos.flush();
@@ -93,7 +93,7 @@ public class Servidor {
                 completados = (leidos * 100)/tamano_arch;
                 System.out.print("\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b");
                 System.out.print("Completado:"+completados+"%");
-                tam_bloque = (tamano_arch >= 1024)? 1024 : (int) tamano_arch;
+                tam_bloque = (tamano_arch-leidos >= 1024)? 1024 : (int) (tamano_arch - leidos);
             }
             
             
