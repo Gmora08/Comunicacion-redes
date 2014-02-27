@@ -13,6 +13,7 @@ public class Servidor {
     int minas;
     int f,c,posf,posc;
     ServerSocket ss;
+    boolean gano,perdio;
     
     public Servidor(){
         try{
@@ -26,6 +27,7 @@ public class Servidor {
         if(ss != null){
             while(true){
                 try {
+                    reset();
                     System.out.println("Servidor Iniciado...");
                     Socket c = ss.accept();
                     c.setSoTimeout(60000);
@@ -39,17 +41,21 @@ public class Servidor {
                     System.out.println("Jugador:" + nombre);
                     //Envia Resultado de Crea Tablero
                     int  rtab = creaTablero();
+                    gano = false;
+                    perdio = false;
                     oos.writeInt(rtab);
                     oos.flush();
                     while(true){
+                        if(gano || perdio){
+                            break;
+                        }
                         try{
                             posf = ois.readInt();
                             posc = ois.readInt();
-                            break;
+                            System.out.println("PosFila: " + posf + " PosColumna: " + posc);
                         }catch(IOException e){}
                         Thread.sleep(200);
                     }
-                    System.out.println("PosFila: " + posf + " PosColumna: " + posc);
 
                     ois.close();
                     oos.close();
@@ -116,11 +122,16 @@ public class Servidor {
             }
             System.out.print("\n");
         }
-        
-        
         return 0;
     }
     
+    public void tirada(int fil,int col){
+    
+    }
+    
+    public void reset(){
+    
+    }
     
     public static void main(String[] args) {
         Servidor s = new Servidor();
