@@ -1,10 +1,17 @@
 package buscaminas;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.Collections;
 
 public class Servidor {
     int[][] tablero;
@@ -58,6 +65,11 @@ public class Servidor {
                        // Thread.sleep(100);
                     }
 
+                    if(gano){
+                        tiempo = ois.readLong();
+                        records(oos);
+                    }
+                    
                     ois.close();
                     oos.close();
                     c.close();
@@ -157,6 +169,56 @@ public class Servidor {
             //destapadas = destapadas - total de espacios en blanco adyacentes
             //Envio codigo de espacio en blanco y un arreglo de las casillas adyacentes???
         //}
+    }
+    
+    private void records(ObjectOutputStream oos) {
+        try{
+            File f = new File("Record"+nivel+".txt");
+            if(!f.exists()){
+                    f.createNewFile();
+            }
+            FileReader fr = new FileReader(f);
+            BufferedReader br = new BufferedReader(fr);
+            ArrayList<String> records = new ArrayList<>();
+            String linea;
+            while((linea=br.readLine())!=null){
+                records.add(linea);
+            }
+            records.add("1,"+jugador+","+tiempo);
+            if(records.size() != 1){
+                String[] j = new String[records.size()];
+                ArrayList<Integer> t = new ArrayList<>();
+                String[] temp;
+                for(int i = 0;i < records.size();i++){
+                    temp = records.get(i).split(",");
+                    j[i] = temp[1];
+                    t.add(Integer.parseInt(temp[2]));
+                }
+                ArrayList<Integer> t2 = (ArrayList<Integer>) t.clone();
+                Collections.sort(t2);
+                int cual;
+                records = new ArrayList<>();
+                for(int i = 0;i < 3;i++){
+                    cual = t.indexOf(t2.get(i));
+                    records.add((i+1)+","+j[cual]+","+t.get(cual));
+                    System.out.println(records.get(i));
+                }
+            }
+            br.close();
+            FileWriter fw = new FileWriter("Record"+nivel+".txt");
+            PrintWriter pw = new PrintWriter(fw);
+
+            for(int i = 0;i<3;i++){
+                pw.println(records.get(i));
+            }
+            pw.flush();
+            pw.close();
+
+            oos.writeObject(records);
+            oos.flush();
+        }catch(IOException e){
+            System.out.println("Error en Records:" + e.getMessage());
+        }
     }
     
     
